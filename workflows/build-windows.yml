@@ -1,0 +1,22 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pyinstaller requests beautifulsoup4
+      - name: Build standalone application
+        run: python -m PyInstaller --noconfirm --clean --onefile --windowed --name UkrZahidParser windows_entry.py
+      - name: Upload Windows application
+        uses: actions/upload-artifact@v4
+        with:
+          name: UkrZahidParser-Windows
+          path: dist/UkrZahidParser.exe
